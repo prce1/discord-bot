@@ -89,15 +89,15 @@ const HANDLERS = [[
               current.temperature
             }°C**, and it feels like **${
               current.apparentTemperature
-            }°C**.\nThe current weather is *${
+            }°C**.\nCurrent weather is **${
               current.summary.toLowerCase()
-            }*, and chance of rain is **${
+            }**, and the chance of rain is **${
               Math.round(current.precipProbability * 100)
-            }%**.\nThe forecast for today is *${
+            }%**.\nForecast for today is **${
               response.hourly.summary.toLowerCase()
-            }*\nThe weekly forecast for ${address} is: *${
+            }**\nWeekly forecast: **${
               response.daily.summary
-            }*`
+            }**`
           );
         })
         .catch(error => console.error(error)); // eslint-disable-line no-console
