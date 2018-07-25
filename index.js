@@ -17,9 +17,9 @@ const client = new Discord.Client();
 client.on('ready', () => {
   console.log(`${groupName} bot is up and running`); // eslint-disable-line no-console
   // client.channels.find('name', 'general')
-  // .send(`${groupName} bot is up and running`);
+  // .send(`${groupName} bot is up and running.`);
   // client.channels.find('name', 'general')
-  // .send(`If you want a list of all commands, type "@${botName} help"`);
+  // .send(`If you want a list of all commands, type "@${botName} help".`);
 });
 
 class StraightResponseError extends Error {}
