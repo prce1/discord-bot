@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "license": "UNLICENCED",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "node index.js"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
