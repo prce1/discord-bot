@@ -4,13 +4,13 @@
 
 
 
-The bot has only a couple commands available, which are: 
+The bot has only a couple commands available, which are:
 - ping
 - weather
 - popularity of a place (bar|night club|restaurant)
 - playing youtube links over a voice channel
 
- 
+
 In order to get this bot working, after cloning the repo and running yarn|npm, you have to set up a few variables.
 
 Create a .env file and set it up as follows:
@@ -24,7 +24,10 @@ GOOGLE_TOKEN="YOUR GOOGLE GEOLOCATOR API TOKEN"
 ```
 Getting all these will only take a couple of minutes.
 
-First, you need to visit [Discord Developers](https://discordapp.com/developers/applications/), create an application, and get that info. You will need Client-ID *(The ID of your bot)*. You will also have to set it up as a bot, and then get it's TOKEN *(Your Discord API Token)* and USERNAME *(The Name of your bot)*. 
+First, you need to visit [Discord Developers](https://discordapp.com/developers/applications/), create an application, and get that info. You will need Client-ID *(The ID of your bot)*. You will also have to set it up as a bot, and then get it's TOKEN *(Your Discord API Token)* and USERNAME *(The Name of your bot)*.
+After obtaining all of those, you will have to invite the bot to your Discord server. Replace the *CLIENTID* in the following link with your bot's Client-ID that you have gotten earlier:
+  https://discordapp.com/oauth2/authorize?client_id=CLIENTID&scope=bot
+and just select your server from the drop-down menu. You must have the Manage Server permission to add a bot to a server! If no servers appear, you may need to log in.
 
 Note: *DISCORD_GROUP_NAME* can be whatever you want, but I recommend setting it to the name of the server you are running your bot in.
 
