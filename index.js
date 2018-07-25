@@ -65,9 +65,6 @@ const HANDLERS = [[
     client.user.setActivity();
   },
 ], [
-  'join',
-  message => message.member.voiceChannel.join(),
-], [
   /^get me weather for ([^,]+)(?:, ([^\s]+))?/i,
   (message, [_, cityL, countryL = 'RS']) => {
     const city = cityL.split(' ').join('+');
