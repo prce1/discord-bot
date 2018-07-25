@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /* eslint no-unused-vars: ["error", { "argsIgnorePattern": "^_" }] */
 
 require('dotenv').config();
@@ -16,7 +15,7 @@ const darkSkyKey = process.env.DARKSKY_TOKEN;
 const client = new Discord.Client();
 
 client.on('ready', () => {
-  console.log(`${groupName} bot is up and running`);
+  console.log(`${groupName} bot is up and running`); // eslint-disable-line no-console
   // client.channels.find('name', 'general')
   // .send(`${groupName} bot is up and running`);
   // client.channels.find('name', 'general')
@@ -53,7 +52,7 @@ const HANDLERS = [[
           message.member.voiceChannel.leave();
           client.user.setActivity();
         });
-      }).catch(error => console.log(error));
+      }).catch(error => console.error(error)); // eslint-disable-line no-console
     } else {
       message.reply('you need to join a channel first!');
     }
@@ -64,9 +63,6 @@ const HANDLERS = [[
     message.member.voiceChannel.leave();
     client.user.setActivity();
   },
-], [
-  'join',
-  message => message.member.voiceChannel.join(),
 ], [
   /^get me weather for ([^,]+)(?:, ([^\s]+))?/i,
   (message, [_, cityL, countryL = 'RS']) => {
@@ -87,7 +83,6 @@ const HANDLERS = [[
         }, ${lng}?units=si`)
         .then(resOne => resOne.json())
         .then((response) => {
-          console.log(response);
           const current = response.currently;
           message.channel.send(
             `The current temperature in ${address} is **${
@@ -105,7 +100,7 @@ const HANDLERS = [[
             }*`
           );
         })
-        .catch(error => console.log(error));
+        .catch(error => console.error(error)); // eslint-disable-line no-console
       }
     }));
   },
@@ -162,7 +157,7 @@ const HANDLERS = [[
       }
     })
     .catch((error) => {
-      console.error(error);
+      console.error(error); // eslint-disable-line no-console
       if (error instanceof StraightResponseError) {
         message.channel.send(error.message);
       } else {
