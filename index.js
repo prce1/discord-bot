@@ -143,11 +143,11 @@ const HANDLERS = [[
           );
         }
         const value = place.meta.popularity[(day * 24) + time];
-        message.channel.send(`The popularity of ${name} on ${dayInput} at ${
+        message.channel.send(`Popularity of ${name} on ${dayInput} at ${
           time}h is ${value}/100.\n${value < 20
           ? 'The place *isn\'t popular* at all at this time.'
           : value < 65
-          ? 'The place *looks good*, but not really full at this time.'
+          ? 'The place *looks promising*, but not really full at this time.'
           : 'The place is *very hot* at this time!'}`
         );
       } else {
