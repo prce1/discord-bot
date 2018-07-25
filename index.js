@@ -87,7 +87,6 @@ const HANDLERS = [[
         }, ${lng}?units=si`)
         .then(resOne => resOne.json())
         .then((response) => {
-          console.log(response);
           const current = response.currently;
           message.channel.send(
             `The current temperature in ${address} is **${
