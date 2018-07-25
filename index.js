@@ -19,7 +19,7 @@ client.on('ready', () => {
   client.channels.find('name', 'general')
   .send(`${groupName} bot is up and running.`);
   client.channels.find('name', 'general')
-  .send(`If you want a list of all commands, type "@${botName} help."`);
+  .send(`If you want a list of all commands, type "@${botName} help".`);
 });
 
 class StraightResponseError extends Error {}
