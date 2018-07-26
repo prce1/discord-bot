@@ -237,5 +237,9 @@ client.on('guildMemberAdd', (member) => {
   channel.send(`Welcome to ${groupName}, ${member}`);
 });
 
+client.on('disconnected', (error) => {
+  console.log(error); // eslint-disable-line no-console
+  client.destroy().then(client.login.bind(client));
+});
 
 client.login(process.env.DISCORD_TOKEN);
