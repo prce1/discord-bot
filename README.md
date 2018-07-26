@@ -1,6 +1,6 @@
 # Discord Bot
 
-#### A small discord bot to use for your group chat.
+#### A small discord bot to use for your group chat, made using discord.js.
 
 
 
@@ -29,7 +29,7 @@ First, you need to visit [Discord Developers](https://discordapp.com/developers/
 After obtaining all of those, you will have to invite the bot to your Discord server. Replace the *CLIENTID* in the following link with your bot's Client-ID that you have gotten earlier:
 
   https://discordapp.com/oauth2/authorize?client_id=CLIENTID&scope=bot
-  
+
 and just select your server from the drop-down menu. You must have the Manage Server permission to add a bot to a server! If no servers appear, you may need to log in.
 
 Note: *DISCORD_GROUP_NAME* can be whatever you want, but I recommend setting it to the name of the server you are running your bot in.
