@@ -113,7 +113,11 @@ const HANDLERS = [[
       slug,
       dayInput = DAY_OF_WEEK[new Date().getDay()],
       timeInput = new Date().getMinutes() > 45
-        ? (new Date().getHours() + 1)
+        ? (
+            (new Date().getHours() + 1) === 24
+            ? 0
+            : (new Date().getHours() + 1)
+          )
         : new Date().getHours(),
     ]
   ) => {
