@@ -39,7 +39,7 @@ const HANDLERS = [[
   'ping',
   message => message.channel.send('Got ping.'),
 ], [
-  /^play ([^]+)$/i,
+  /^play (.+)$/i,
   async (message, [_, link]) => {
     if (message.member.voiceChannel) {
       const streamOptions = { seek: 0, volume: 1 };
