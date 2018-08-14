@@ -5,6 +5,7 @@ const fetch = require('node-fetch');
 const Discord = require('discord.js');
 const isString = require('lodash/isString');
 const ytdl = require('ytdl-core');
+const date = require('date-and-time');
 
 
 const botID = process.env.BOT_ID;
@@ -168,6 +169,29 @@ const HANDLERS = [[
         message.channel.send(`Oops, something went wrong: ${error.message}.`);
       }
     });
+  },
+], [
+  /remind me to (.+) in (\d+) ([^\s]+)/i,
+  (message, [_, reminder, number, identifier = 'minutes']) => {
+    const now = new Date();
+    let time = {};
+    switch (identifier) {
+      case 'minutes':
+      time = (date.addMinutes(now, parseInt(number, 10)) - now);
+      break;
+      case 'hours':
+      time = (date.addHours(now, parseInt(number, 10)) - now);
+      break;
+      case 'seconds':
+      time = (date.addSeconds(now, parseInt(number, 10)) - now);
+      break;
+      default:
+      message.channel.send('Invalid');
+    }
+    client.setTimeout(() => {
+      console.log('sent!');
+      message.author.send(`You need to ${reminder}!`);
+    }, time, message);
   },
 ], [
   'help',
