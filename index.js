@@ -136,7 +136,9 @@ const HANDLERS = [[
         const name = place.meta.name.charAt(0).toUpperCase() +
           place.meta.name.substr(1);
         let day = DAY_OF_WEEK.indexOf(dayInput);
-        const time = parseInt(timeInput, 10);
+        const time = parseInt(timeInput, 10) === 24
+          ? 0
+          : parseInt(timeInput, 10);
         if (day === -1) {
           day = DAY_OF_WEEK.indexOf(`${dayInput}s`);
           if (day === -1) {
