@@ -1,18 +1,17 @@
 /* eslint no-unused-vars: ["error", { "argsIgnorePattern": "^_" }] */
 
 require('dotenv').config();
+
 const fetch = require('node-fetch');
 const Discord = require('discord.js');
 const isString = require('lodash/isString');
 const ytdl = require('ytdl-core');
-const date = require('date-and-time');
-
 
 const botID = process.env.BOT_ID;
 const botName = process.env.BOT_NAME;
+const discordToken = process.env.CLIENT_TOKEN;
 const groupName = process.env.DISCORD_GROUP_NAME;
-const googleKey = process.env.GOOGLE_TOKEN;
-const darkSkyKey = process.env.DARKSKY_TOKEN;
+
 const client = new Discord.Client();
 
 client.on('ready', () => {
@@ -66,23 +65,23 @@ const HANDLERS = [[
   },
 ], [
   /^get me weather for ([^,]+)(?:, ([^\s]+))?/i,
-  (message, [_, cityL, countryL = 'RS']) => {
+  (message, [_, cityL, country = 'RS']) => {
     const city = cityL.split(' ').join('+');
     fetch(
       `https://maps.googleapis.com/maps/api/geocode/json?address=${city},+${
-        countryL}&key=${googleKey}`
+        country}&key=${process.env.GOOGLE_TOKEN}`
     )
     .then(res => res.json()
-    .then((result) => {
-      if (result.status !== 'OK') {
-        message.channel.send('You have entered an invalid address.');
+    .then((resJson) => {
+      if (resJson.status !== 'OK') {
+        throw new StraightResponseError('You have entered an invalid address.');
       } else {
-        const { lat, lng } = result.results[0].geometry.location;
-        const address = result.results[0].formatted_address;
-        fetch(`https://api.darksky.net/forecast/${darkSkyKey}/${
+        const { lat, lng } = resJson.results[0].geometry.location;
+        const address = resJson.results[0].formatted_address;
+        fetch(`https://api.darksky.net/forecast/${process.env.DARKSKY_TOKEN}/${
           lat
         }, ${lng}?units=si`)
-        .then(resOne => resOne.json())
+        .then(result => result.json())
         .then((response) => {
           const current = response.currently;
           message.channel.send(
@@ -101,7 +100,14 @@ const HANDLERS = [[
             }**`
           );
         })
-        .catch(error => console.error(error)); // eslint-disable-line no-console
+        .catch((error) => {
+          console.error(error); // eslint-disable-line no-console
+          if (error instanceof StraightResponseError) {
+            message.channel.send(error);
+          } else {
+            message.channel.send(`Something went wrong: ${error}`);
+          }
+        });
       }
     }));
   },
@@ -135,10 +141,10 @@ const HANDLERS = [[
       if (place) {
         const name = place.meta.name.charAt(0).toUpperCase() +
           place.meta.name.substr(1);
-        let day = DAY_OF_WEEK.indexOf(dayInput);
         const time = parseInt(timeInput, 10) === 24
           ? 0
           : parseInt(timeInput, 10);
+        let day = DAY_OF_WEEK.indexOf(dayInput);
         if (day === -1) {
           day = DAY_OF_WEEK.indexOf(`${dayInput}s`);
           if (day === -1) {
@@ -159,7 +165,9 @@ const HANDLERS = [[
         );
       } else {
         throw new StraightResponseError(
-          `Cannot find place "${slug}".`
+          `Cannot find place "${
+            slug.charAt(0).toUpperCase() + slug.substr(1)
+          }".`
         );
       }
     })
@@ -175,23 +183,23 @@ const HANDLERS = [[
 ], [
   /remind me to (.+) in (\d+) ([^\s]+)/i,
   (message, [_, reminder, number, identifier = 'minutes']) => {
-    const now = new Date();
     let time = {};
+    identifier.toLowerCase();
     switch (identifier) {
+      case 'seconds':
+      time = parseInt(number, 10) * 1000;
+      break;
       case 'minutes':
-      time = (date.addMinutes(now, parseInt(number, 10)) - now);
+      time = parseInt(number, 10) * 60 * 1000;
       break;
       case 'hours':
-      time = (date.addHours(now, parseInt(number, 10)) - now);
-      break;
-      case 'seconds':
-      time = (date.addSeconds(now, parseInt(number, 10)) - now);
+      time = parseInt(number, 10) * 60 * 60 * 1000;
       break;
       default:
-      message.channel.send('Invalid');
+      message.channel.send(`Invalid time: ${number}`);
     }
     client.setTimeout(() => {
-      console.log('sent!');
+      console.log(`Sent reminder: ${reminder}.`); // eslint-disable-line no-console
       message.author.send(`You need to ${reminder}!`);
     }, time, message);
   },
@@ -268,8 +276,14 @@ client.on('guildMemberAdd', (member) => {
 });
 
 client.on('disconnected', (error) => {
-  console.log(error); // eslint-disable-line no-console
-  client.destroy().then(client.login.bind(client));
+  console.error(error); // eslint-disable-line no-console
+    client.destroy().then(client.login(discordToken));
 });
 
-client.login(process.env.DISCORD_TOKEN);
+client.on('error', (error) => {
+  console.error(error); // eslint-disable-line no-console
+  console.log('reconnecting after an error'); // eslint-disable-line no-console
+    client.destroy().then(client.login(discordToken));
+});
+
+client.login(discordToken);
