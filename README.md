@@ -40,3 +40,6 @@ Lastly, you will need a *GOOGLE_TOKEN*. You only need to get an API key for Goog
 
 
 After setting all these up, just save the file and run yarn|npm start in your console, and you're good to go!
+
+
+##### It should be noted that this is a work in progress, and should only be taken as such.
