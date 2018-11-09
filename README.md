@@ -3,12 +3,12 @@
 #### A small discord bot to use for your group chat, made using discord.js.
 
 
-
 The bot has only a couple commands available, which are:
 - ping
 - weather
-- popularity of a place (bar|night club|restaurant)
+- popularity of a place (bar|night club|restaurant), currently only supports Dubai and Belgrade
 - playing youtube links over a voice channel
+- use the bot to remind you of a task, sending you a direct message at the specified time
 
 
 In order to get this bot working, after cloning the repo and running yarn|npm, you have to set up a few variables.
@@ -40,3 +40,6 @@ Lastly, you will need a *GOOGLE_TOKEN*. You only need to get an API key for Goog
 
 
 After setting all these up, just save the file and run yarn|npm start in your console, and you're good to go!
+
+
+##### It should be noted that this is a work in progress, and should only be taken as such.
