@@ -7,8 +7,9 @@
 The bot has only a couple commands available, which are:
 - ping
 - weather
-- popularity of a place (bar|night club|restaurant)
+- popularity of a place (bar|night club|restaurant), currently only supports Dubai and Belgrade
 - playing youtube links over a voice channel
+- use the bot to remind you of a task, sending you a direct message at the specified time
 
 
 In order to get this bot working, after cloning the repo and running yarn|npm, you have to set up a few variables.

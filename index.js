@@ -54,14 +54,24 @@ const HANDLERS = [[
         });
       }).catch(error => console.error(error)); // eslint-disable-line no-console
     } else {
-      message.reply('you need to join a channel first!');
+      message.reply('You need to join a channel first!');
     }
+    message.delete(3000)
+      // eslint-disable-next-line no-console
+      .then(msg => console.log(`Deleted message from ${msg.author.username}`))
+      // eslint-disable-next-line no-console
+      .catch(console.error);
   },
 ], [
   'stop',
   (message) => {
     message.member.voiceChannel.leave();
     client.user.setActivity();
+    message.delete(3000)
+      // eslint-disable-next-line no-console
+      .then(msg => console.log(`Deleted message from ${msg.author.username}`))
+      // eslint-disable-next-line no-console
+      .catch(console.error);
   },
 ], [
   /^get me weather for ([^,]+)(?:, ([^\s]+))?/i,
@@ -159,9 +169,9 @@ const HANDLERS = [[
         message.channel.send(`Popularity of ${name} on ${dayInput} at ${
           time}h is ${value}/100.\n${value < 20
           ? 'The place *isn\'t popular* at all at this time.'
-          : value < 65
-          ? 'The place *looks promising*, but not really full at this time.'
-          : 'The place is *very hot* at this time!'}`
+          : value < 70
+          ? 'The place has people, but it\'s not really full at this time.'
+          : 'The place is *packed* at this time!'}`
         );
       } else {
         throw new StraightResponseError(
@@ -194,6 +204,9 @@ const HANDLERS = [[
       break;
       case 'hours':
       time = parseInt(number, 10) * 60 * 60 * 1000;
+      break;
+      case 'days':
+      time = parseInt(number, 10) * 24 * 60 * 60 * 1000;
       break;
       default:
       message.channel.send(`Invalid time: ${number}`);
