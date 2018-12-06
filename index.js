@@ -11,11 +11,13 @@ const botID = process.env.BOT_ID;
 const botName = process.env.BOT_NAME;
 const discordToken = process.env.CLIENT_TOKEN;
 const groupName = process.env.DISCORD_GROUP_NAME;
+const entryRole = process.env.ENTRY_ROLE;
 
 const client = new Discord.Client();
 
 client.on('ready', () => {
-  console.log(`${groupName} bot is up and running`); // eslint-disable-line no-console
+  // eslint-disable-next-line no-console
+  console.log(`${groupName} bot is up and running`);
   // client.channels.find('name', 'general')
   // .send(`${groupName} bot is up and running.`);
   // client.channels.find('name', 'general')
@@ -34,8 +36,97 @@ const DAY_OF_WEEK = [
   'saturdays',
 ];
 
+const ALPHABETEMOJI = [
+  '🇦',
+  '🇧',
+  '🇨',
+  '🇩',
+  '🇪',
+  '🇫',
+  '🇬',
+  '🇭',
+  '🇮',
+  '🇯',
+  '🇰',
+  '🇱',
+  '🇲',
+  '🇳',
+  '🇴',
+  '🇵',
+  '🇶',
+  '🇷',
+  '🇸',
+  '🇹',
+  '🇺',
+  '🇻',
+  '🇼',
+  '🇽',
+  '🇾',
+  '🇿',
+  ];
+
 const HANDLERS = [[
-  'ping',
+  /^poll:?{(.+)}$/i,
+  ((message, [_, question]) => {
+    message.channel.send(`@everyone\n ${question}`)
+    .then((msg) => {
+      msg.react('👍');
+      msg.react('👎');
+      msg.react('🤷');
+    });
+  }),
+], [
+  /^poll:?{(.+)}((\[[^\]]+\])+)/i,
+  ((message, [_, question, answers]) => {
+    question = question.replace(/(.+)/g, '*$&*');
+    const ansArr = answers
+    .split(']')
+    .filter(answer => answer)
+    .reduce((agr, ans) => {
+      agr.push(ans.replace('[', ''));
+      return agr;
+    }, []);
+    const pollArray = [];
+    for (let i = 0; i < ansArr.length; i++) {
+      pollArray.push(`${ALPHABETEMOJI[i]}:  ${ansArr[i]}`);
+    }
+    message.channel.send('@everyone');
+    message.channel.send({
+      embed: {
+        color: 3447003,
+        title: question,
+        description: pollArray.join('\n\n'),
+      },
+    })
+    .then(async (msg) => {
+      for (let i = 0; i < ansArr.length; i++) {
+        await msg.react(ALPHABETEMOJI[i]);
+      }
+    });
+    message.delete();
+  }),
+], [
+  /^kick (.+)/i,
+  ((message, [_, name]) => {
+    const user = message.guild.members.get(name.replace(/[<@>]/g, ''));
+    user
+    .kick()
+    .then(
+      // eslint-disable-next-line no-console
+      console.log(
+        `${new Date()
+        }: ${message.author.username} removed ${user.user.username}.`)
+    )
+    .then(
+      message.channel.send(
+        `You have successfully kicked ${user.user.username} from the server.`
+      )
+    )
+    // eslint-disable-next-line no-console
+    .catch(error => console.error(error.message));
+  }),
+], [
+  /^ping$/i,
   message => message.channel.send('Got ping.'),
 ], [
   /^play (.+)$/i,
@@ -52,7 +143,8 @@ const HANDLERS = [[
           message.member.voiceChannel.leave();
           client.user.setActivity();
         });
-      }).catch(error => console.error(error)); // eslint-disable-line no-console
+      // eslint-disable-next-line no-console
+      }).catch(error => console.error(error));
     } else {
       message.reply('You need to join a channel first!');
     }
@@ -65,13 +157,16 @@ const HANDLERS = [[
 ], [
   'stop',
   (message) => {
-    message.member.voiceChannel.leave();
-    client.user.setActivity();
     message.delete(3000)
       // eslint-disable-next-line no-console
-      .then(msg => console.log(`Deleted message from ${msg.author.username}`))
+      .then(console.log(`Deleted message from ${message.author.username}`))
       // eslint-disable-next-line no-console
       .catch(console.error);
+    try {
+      message.member.voiceChannel.leave();
+    // eslint-disable-next-line no-empty
+    } catch (error) {}
+    client.user.setActivity();
   },
 ], [
   /^get me weather for ([^,]+)(?:, ([^\s]+))?/i,
@@ -111,7 +206,8 @@ const HANDLERS = [[
           );
         })
         .catch((error) => {
-          console.error(error); // eslint-disable-line no-console
+          // eslint-disable-next-line no-console
+          console.error(error);
           if (error instanceof StraightResponseError) {
             message.channel.send(error);
           } else {
@@ -182,7 +278,8 @@ const HANDLERS = [[
       }
     })
     .catch((error) => {
-      console.error(error); // eslint-disable-line no-console
+      // eslint-disable-next-line no-console
+      console.error(error);
       if (error instanceof StraightResponseError) {
         message.channel.send(error.message);
       } else {
@@ -191,9 +288,9 @@ const HANDLERS = [[
     });
   },
 ], [
-  /remind me to (.+) in (\d+) ([^\s]+)/i,
-  (message, [_, reminder, number, identifier = 'minutes']) => {
-    let time = {};
+  /remind me to (.+) in (\d+)\s?([^\s]+)?/i,
+  (message, [_, reminder, number, identifier = 'seconds']) => {
+    let time = 0;
     identifier.toLowerCase();
     switch (identifier) {
       case 'seconds':
@@ -212,7 +309,8 @@ const HANDLERS = [[
       message.channel.send(`Invalid time: ${number}`);
     }
     client.setTimeout(() => {
-      console.log(`Sent reminder: ${reminder}.`); // eslint-disable-line no-console
+      // eslint-disable-next-line no-console
+      console.log(`Sent reminder: ${reminder}. to user: ${message.author}`);
       message.author.send(`You need to ${reminder}!`);
     }, time, message);
   },
@@ -224,36 +322,45 @@ const HANDLERS = [[
       `eg: *@${botName} ping*\n` +
       'All the commands are case insensitive.\n' +
       'Available commands for this bot are:\n\n' +
-      '**ping** : The bot tells you if it got a ping.\n\n' +
+      '**ping** :\n The bot tells you if it got a ping.\n\n' +
       '**get me popularity of ' +
       '*"place"*** (required)** on *"day"*** (optional)**' +
-      ' at *"time"*** (optional) : ' +
+      ' at *"time"*** (optional) : \n' +
       'The bot returns the popualrity of a place based on populr.app.\n\n' +
       '**get me weather for *"address"*** (required)**, ' +
-      '*"country"*** (optional) : ' +
-      'The bot returns weather for given city, ' +
-      'based on darksky.net.\n' +
-      'The address can be either a full address, or just a city name.' +
+      '*"country"*** (optional) :\n ' +
+      'The bot will tell you the weather for the given address, ' +
+      'based on darksky.net.' +
+      'The address can be either a full address, or just a city name. ' +
       'Full address assumes "StreetName StreetNumber CityName, Country".' +
       'If you don\'t enter a Country, it will default to RS(Serbia).\n\n' +
-      '**play *"youtube url"*** (required) : ' +
+      '**play *"youtube url"*** (required) : \n' +
       'The bot plays a youtube video (audio only)' +
       ' in the voice channel you are currently in.\n\n' +
-      '**stop** : The bot stops the song playing & leaves the channel.'
+      '**stop** : \nThe bot stops the song playing & leaves the channel.\n\n' +
+      '**remind me to *"reminder"* **(required)** in *"number"* ' +
+      '**(required)** *"identifier"* **(eg. minutes, hours)(optional) :\n' +
+      'The bot will send you a direct message with the reminder.\n\n' +
+      '**poll:{*question* }**(required)** [*answer*' +
+      ']**(optional, can have as many answers as you want) :\n' +
+      'The bot will send a poll' +
+      '@everyone with reactions available as means of answering.\n\n'
     )
+    .then(message.delete())
   ),
 ]].map(([test, callback]) => ([
   isString(test)
   ? new RegExp(
-      `^${test.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, // eslint-disable-line no-useless-escape
+      // eslint-disable-next-line no-useless-escape
+      `^${test.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g,
       '\\$&')}$`,
       'i'
     )
   : test,
   callback,
 ]));
-
-client.on('message', (message) => { // eslint-disable-line consistent-return
+// eslint-disable-next-line consistent-return
+client.on('message', (message) => {
   if ((/^(bot) ([^]+)$/).test(message.content)) {
    message.channel.send(`For a list of commands, type "@${botName} help".`);
   }
@@ -273,6 +380,7 @@ client.on('message', (message) => { // eslint-disable-line consistent-return
           // message.delete(1000 * 15);
           return callback(message, match);
         }
+        // message.channel.send(`For a list of commands, type "@${botName} help"`);
       }
     // } else if (message.author.username === `${botName}`) {
     //   message.delete(1000 * 3 * 60);
@@ -281,22 +389,38 @@ client.on('message', (message) => { // eslint-disable-line consistent-return
 });
 
 client.on('guildMemberAdd', (member) => {
+  const guestRole = member.guild.roles.find(role => role.name === entryRole);
   const channel = member.guild.channels.find('name', 'general');
   if (!channel) {
     return;
   }
-  channel.send(`Welcome to ${groupName}, ${member}`);
+  member
+  .addRole(guestRole)
+  .then(
+    channel.send(
+      `Welcome to ${groupName}, ${member}. Your role is now ${entryRole}. ` +
+      'Please contact the administrators to promote you ' +
+      'in order to access more of this channel.'
+    )
+  )
+  // eslint-disable-next-line no-console
+  .catch(console.error);
 });
 
 client.on('disconnected', (error) => {
-  console.error(error); // eslint-disable-line no-console
-    client.destroy().then(client.login(discordToken));
+  // eslint-disable-next-line no-console
+  console.error(error.message);
+  // eslint-disable-next-line no-console
+  console.log('uh-oh, network trouble');
+  client.destroy().then(client.login(discordToken));
 });
 
-client.on('error', (error) => {
-  console.error(error); // eslint-disable-line no-console
-  console.log('reconnecting after an error'); // eslint-disable-line no-console
-    client.destroy().then(client.login(discordToken));
+client.on('error', (_) => {
+  // eslint-disable-next-line no-console
+  // console.error(error.message);
+  // eslint-disable-next-line no-console
+  console.log('reconnecting after an error');
+  client.destroy().then(client.login(discordToken));
 });
 
 client.login(discordToken);
