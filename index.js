@@ -66,44 +66,42 @@ const ALPHABETEMOJI = [
   ];
 
 const HANDLERS = [[
-  /^poll:?{(.+)}$/i,
+  /^poll:\s+([^[]+)\s*$/i,
   ((message, [_, question]) => {
-    message.channel.send(`@everyone\n ${question}`)
-    .then((msg) => {
-      msg.react('👍');
-      msg.react('👎');
-      msg.react('🤷');
-    });
-  }),
-], [
-  /^poll:?{(.+)}((\[[^\]]+\])+)/i,
-  ((message, [_, question, answers]) => {
-    question = question.replace(/(.+)/g, '*$&*');
-    const ansArr = answers
-    .split(']')
-    .filter(answer => answer)
-    .reduce((agr, ans) => {
-      agr.push(ans.replace('[', ''));
-      return agr;
-    }, []);
-    const pollArray = [];
-    for (let i = 0; i < ansArr.length; i++) {
-      pollArray.push(`${ALPHABETEMOJI[i]}:  ${ansArr[i]}`);
-    }
-    message.channel.send('@everyone');
     message.channel.send({
       embed: {
         color: 3447003,
         title: question,
-        description: pollArray.join('\n\n'),
       },
     })
     .then(async (msg) => {
-      for (let i = 0; i < ansArr.length; i++) {
+      await msg.react('👍');
+      await msg.react('👎');
+      await msg.react('🤷');
+    });
+    message.delete();
+  }),
+], [
+  /^poll:\s+([^[]+)\s+((\[[^\]]+\])+)\s*$/i,
+  ((message, [_, rawQuestion, rawAnswers]) => {
+    const question = `*${rawQuestion}*`;
+    const answers = rawAnswers
+    .slice(1, -1)
+    .split('][')
+    .map((answer, i) => `${ALPHABETEMOJI[i]}: ${answer}`);
+    message.channel.send({
+      embed: {
+        color: 3447003,
+        title: question,
+        description: answers.join('\n\n'),
+      },
+    })
+    .then(async (msg) => {
+      for (let i = 0; i < answers.length; i++) {
         await msg.react(ALPHABETEMOJI[i]);
       }
     });
-    message.delete();
+    return message.delete();
   }),
 ], [
   /^kick (.+)/i,
