@@ -68,12 +68,7 @@ const ALPHABETEMOJI = [
 const HANDLERS = [[
   /^poll:\s+([^[]+)\s*$/i,
   ((message, [_, question]) => {
-    message.channel.send({
-      embed: {
-        color: 3447003,
-        title: question,
-      },
-    })
+    message.channel.send(question)
     .then(async (msg) => {
       await msg.react('👍');
       await msg.react('👎');
@@ -84,15 +79,15 @@ const HANDLERS = [[
 ], [
   /^poll:\s+([^[]+)\s+((\[[^\]]+\])+)\s*$/i,
   ((message, [_, rawQuestion, rawAnswers]) => {
-    const question = `*${rawQuestion}*`;
+    // const question = `*${rawQuestion}*`;
     const answers = rawAnswers
     .slice(1, -1)
     .split('][')
-    .map((answer, i) => `${ALPHABETEMOJI[i]}: ${answer}`);
+    .map((answer, i) => `${ALPHABETEMOJI[i]} ${answer}`);
+    message.channel.send(rawQuestion);
     message.channel.send({
       embed: {
         color: 3447003,
-        title: question,
         description: answers.join('\n\n'),
       },
     })
@@ -339,7 +334,7 @@ const HANDLERS = [[
       '**remind me to *"reminder"* **(required)** in *"number"* ' +
       '**(required)** *"identifier"* **(eg. minutes, hours)(optional) :\n' +
       'The bot will send you a direct message with the reminder.\n\n' +
-      '**poll:{*question* }**(required)** [*answer*' +
+      '**poll:*question***(required)** [*answer*' +
       ']**(optional, can have as many answers as you want) :\n' +
       'The bot will send a poll' +
       '@everyone with reactions available as means of answering.\n\n'
