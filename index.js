@@ -68,7 +68,7 @@ const ALPHABETEMOJI = [
 const HANDLERS = [[
   /^poll:\s+([^[]+)\s*$/i,
   ((message, [_, question]) => {
-    message.channel.send(question)
+    message.channel.send(`${question}  @everyone`)
     .then(async (msg) => {
       await msg.react('👍');
       await msg.react('👎');
@@ -84,7 +84,7 @@ const HANDLERS = [[
     .slice(1, -1)
     .split('][')
     .map((answer, i) => `${ALPHABETEMOJI[i]} ${answer}`);
-    message.channel.send(rawQuestion);
+    message.channel.send(`${rawQuestion}  @everyone`);
     message.channel.send({
       embed: {
         color: 3447003,
