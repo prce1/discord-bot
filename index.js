@@ -12,6 +12,7 @@ const botName = process.env.BOT_NAME;
 const discordToken = process.env.CLIENT_TOKEN;
 const groupName = process.env.DISCORD_GROUP_NAME;
 const entryRole = process.env.ENTRY_ROLE;
+let count = 0;
 
 const client = new Discord.Client();
 
@@ -66,6 +67,12 @@ const ALPHABETEMOJI = [
   ];
 
 const HANDLERS = [[
+  /^say:\s+(.+)/i,
+  ((message, [_, msg]) => {
+    message.channel.send(`${msg}\n@everyone`);
+    message.delete();
+  }),
+], [
   /^poll:\s+([^[]+)\s*$/i,
   ((message, [_, question]) => {
     message.channel.send(`${question}  @everyone`)
@@ -355,7 +362,7 @@ const HANDLERS = [[
 // eslint-disable-next-line consistent-return
 client.on('message', (message) => {
   if ((/^(bot) ([^]+)$/).test(message.content)) {
-   message.channel.send(`For a list of commands, type "@${botName} help".`);
+    message.channel.send(`For a list of commands, type "@${botName} help".`);
   }
   if (message.mentions.users.find('id', botID)) {
     const messageReplaced = message.content
@@ -413,6 +420,9 @@ client.on('error', (_) => {
   // console.error(error.message);
   // eslint-disable-next-line no-console
   console.log('reconnecting after an error');
+  count++;
+  // eslint-disable-next-line no-console
+  console.log(count);
   client.destroy().then(client.login(discordToken));
 });
 
