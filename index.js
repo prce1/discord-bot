@@ -12,7 +12,6 @@ const botName = process.env.BOT_NAME;
 const discordToken = process.env.CLIENT_TOKEN;
 const groupName = process.env.DISCORD_GROUP_NAME;
 const entryRole = process.env.ENTRY_ROLE;
-let count = 0;
 
 const client = new Discord.Client();
 
@@ -64,9 +63,15 @@ const ALPHABETEMOJI = [
   '🇽',
   '🇾',
   '🇿',
-  ];
+];
 
 const HANDLERS = [[
+  'error',
+  (message) => {
+    client.emit('error', new Error('dev made error'));
+    message.channel.send('Y U DO DIS?');
+  },
+], [
   /^say:\s+(.+)/i,
   ((message, [_, msg]) => {
     message.channel.send(`${msg}\n@everyone`);
@@ -86,7 +91,6 @@ const HANDLERS = [[
 ], [
   /^poll:\s+([^[]+)\s+((\[[^\]]+\])+)\s*$/i,
   ((message, [_, rawQuestion, rawAnswers]) => {
-    // const question = `*${rawQuestion}*`;
     const answers = rawAnswers
     .slice(1, -1)
     .split('][')
@@ -359,6 +363,7 @@ const HANDLERS = [[
   : test,
   callback,
 ]));
+
 // eslint-disable-next-line consistent-return
 client.on('message', (message) => {
   if ((/^(bot) ([^]+)$/).test(message.content)) {
@@ -407,23 +412,11 @@ client.on('guildMemberAdd', (member) => {
   .catch(console.error);
 });
 
-client.on('disconnected', (error) => {
-  // eslint-disable-next-line no-console
-  console.error(error.message);
-  // eslint-disable-next-line no-console
-  console.log('uh-oh, network trouble');
-  client.destroy().then(client.login(discordToken));
-});
-
-client.on('error', (_) => {
-  // eslint-disable-next-line no-console
-  // console.error(error.message);
-  // eslint-disable-next-line no-console
-  console.log('reconnecting after an error');
-  count++;
-  // eslint-disable-next-line no-console
-  console.log(count);
-  client.destroy().then(client.login(discordToken));
-});
+// eslint-disable-next-line no-console
+client.on('error', error => console.error(error.message));
+// eslint-disable-next-line no-console
+client.on('warn', error => console.warn(error));
+// enable if you want all the info from DiscordJS
+// client.on('debug', e => console.info(e));
 
 client.login(discordToken);
