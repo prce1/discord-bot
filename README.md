@@ -21,6 +21,7 @@ DISCORD_TOKEN="YOUR DISCORD API TOKEN"
 BOT_NAME="THE NAME OF YOUR BOT"
 BOT_ID="THE ID OF YOUR BOT"
 DISCORD_GROUP_NAME="THE NAME OF YOUR DISCORD GROUP / GUILD / SERVER"
+ENTRY_ROLE="YOUR ENTRY ROLE NAME HERE"
 DARKSKY_TOKEN="YOUR DARKSKY API TOKEN"
 GOOGLE_TOKEN="YOUR GOOGLE GEOLOCATOR API TOKEN"
 ```
@@ -35,6 +36,8 @@ After obtaining all of those, you will have to invite the bot to your Discord se
 and just select your server from the drop-down menu. You must have the Manage Server permission to add a bot to a server! If no servers appear, you may need to log in.
 
 Note: *DISCORD_GROUP_NAME* can be whatever you want, but I recommend setting it to the name of the server you are running your bot in.
+
+NOTE: *ENTRY_ROLE* can be whatever you set up on your Discord server. If you do not want this, just leave it an empty string("").
 
 To get your *DARKSKY_TOKEN*, you should go to [Dark Sky](darksky.net/dev) and register. They will give you a key to use, and they have 1000(!) free calls per day.
 
