@@ -11,7 +11,7 @@ const botID = process.env.BOT_ID;
 const botName = process.env.BOT_NAME;
 const discordToken = process.env.CLIENT_TOKEN;
 const groupName = process.env.DISCORD_GROUP_NAME;
-const entryRole = process.env.ENTRY_ROLE;
+const entryRole = `@${process.env.ENTRY_ROLE}`;
 
 const client = new Discord.Client();
 
