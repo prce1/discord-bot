@@ -399,17 +399,20 @@ client.on('guildMemberAdd', (member) => {
   if (!channel) {
     return;
   }
-  member
-  .addRole(guestRole)
-  .then(
-    channel.send(
-      `Welcome to ${groupName}, ${member}. Your role is now ${entryRole}. ` +
-      'Please contact the administrators to promote you ' +
-      'in order to access more of this channel.'
+  channel.send(`Welcome to ${groupName}, ${member}.`);
+  if (guestRole) {
+    member
+    .addRole(guestRole)
+    .then(
+      channel.send(
+        `Your role is now ${entryRole}. ` +
+        'Please contact the administrators to promote you ' +
+        'in order to access more of this channel.'
+      )
     )
-  )
-  // eslint-disable-next-line no-console
-  .catch(console.error);
+    // eslint-disable-next-line no-console
+    .catch(console.error);
+  }
 });
 
 // eslint-disable-next-line no-console
