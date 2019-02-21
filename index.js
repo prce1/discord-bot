@@ -18,6 +18,7 @@ const client = new Discord.Client();
 class StraightResponseError extends Error {}
 
 const debug = (string) => {
+  // change en-GB to en-US if you want date and month reversed
   // eslint-disable-next-line no-console
   console.log(`${new Intl.DateTimeFormat('en-GB', {
     year: 'numeric',
@@ -423,7 +424,6 @@ client.on('guildMemberAdd', (member) => {
 });
 
 client.on('error', (error) => {
-  // change en-GB to en-US if you want date and month reversed
   debug(error.message);
 });
 
