@@ -15,16 +15,27 @@ const entryRole = `@${process.env.ENTRY_ROLE}`;
 
 const client = new Discord.Client();
 
-client.on('ready', () => {
+class StraightResponseError extends Error {}
+
+const debug = (string) => {
   // eslint-disable-next-line no-console
-  console.log(`${groupName} bot is up and running`);
+  console.log(`${new Intl.DateTimeFormat('en-GB', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    hour12: false,
+    minute: '2-digit',
+  }).format(new Date())}: ${string}`);
+};
+
+client.on('ready', () => {
+  debug(`${groupName} bot is up and running`);
   // client.channels.find('name', 'general')
   // .send(`${groupName} bot is up and running.`);
   // client.channels.find('name', 'general')
   // .send(`If you want a list of all commands, type "@${botName} help".`);
 });
-
-class StraightResponseError extends Error {}
 
 const DAY_OF_WEEK = [
   'sundays',
@@ -116,8 +127,8 @@ const HANDLERS = [[
     user
     .kick()
     .then(
-      // eslint-disable-next-line no-console
-      console.log(
+
+      debug(
         `${new Date()
         }: ${message.author.username} removed ${user.user.username}.`)
     )
@@ -126,8 +137,8 @@ const HANDLERS = [[
         `You have successfully kicked ${user.user.username} from the server.`
       )
     )
-    // eslint-disable-next-line no-console
-    .catch(error => console.error(error.message));
+
+    .catch(error => debug(error.message));
   }),
 ], [
   /^ping$/i,
@@ -147,25 +158,24 @@ const HANDLERS = [[
           message.member.voiceChannel.leave();
           client.user.setActivity();
         });
-      // eslint-disable-next-line no-console
-      }).catch(error => console.error(error));
+      }).catch(error => debug(error));
     } else {
       message.reply('You need to join a channel first!');
     }
     message.delete(3000)
-      // eslint-disable-next-line no-console
-      .then(msg => console.log(`Deleted message from ${msg.author.username}`))
-      // eslint-disable-next-line no-console
-      .catch(console.error);
+
+      .then(msg => debug(`Deleted message from ${msg.author.username}`))
+
+      .catch(debug);
   },
 ], [
   'stop',
   (message) => {
     message.delete(3000)
-      // eslint-disable-next-line no-console
-      .then(console.log(`Deleted message from ${message.author.username}`))
-      // eslint-disable-next-line no-console
-      .catch(console.error);
+
+      .then(debug(`Deleted message from ${message.author.username}`))
+
+      .catch(debug);
     try {
       message.member.voiceChannel.leave();
     // eslint-disable-next-line no-empty
@@ -210,8 +220,7 @@ const HANDLERS = [[
           );
         })
         .catch((error) => {
-          // eslint-disable-next-line no-console
-          console.error(error);
+          debug(error);
           if (error instanceof StraightResponseError) {
             message.channel.send(error);
           } else {
@@ -282,8 +291,7 @@ const HANDLERS = [[
       }
     })
     .catch((error) => {
-      // eslint-disable-next-line no-console
-      console.error(error);
+      debug(error);
       if (error instanceof StraightResponseError) {
         message.channel.send(error.message);
       } else {
@@ -313,8 +321,7 @@ const HANDLERS = [[
       message.channel.send(`Invalid time: ${number}`);
     }
     client.setTimeout(() => {
-      // eslint-disable-next-line no-console
-      console.log(`Sent reminder: ${reminder}. to user: ${message.author}`);
+      debug(`Sent reminder: ${reminder}. to user: ${message.author}`);
       message.author.send(`You need to ${reminder}!`);
     }, time, message);
   },
@@ -410,16 +417,18 @@ client.on('guildMemberAdd', (member) => {
         'in order to access more of this channel.'
       )
     )
-    // eslint-disable-next-line no-console
-    .catch(console.error);
+
+    .catch(debug);
   }
 });
 
-// eslint-disable-next-line no-console
-client.on('error', error => console.error(error.message));
-// eslint-disable-next-line no-console
-client.on('warn', error => console.warn(error));
+client.on('error', (error) => {
+  // change en-GB to en-US if you want date and month reversed
+  debug(error.message);
+});
+
+client.on('warn', error => debug(error));
 // enable if you want all the info from DiscordJS
-// client.on('debug', e => console.info(e));
+// client.on('debug', e => debug(e));
 
 client.login(discordToken);
