@@ -1,4 +1,4 @@
-export const debug = (string) => {
+const debug = (string) => {
   // change en-GB to en-US if you want date and month reversed
   // eslint-disable-next-line no-console
   console.log(`${new Intl.DateTimeFormat('en-GB', {
@@ -11,7 +11,7 @@ export const debug = (string) => {
   }).format(new Date())}: ${string}`);
 };
 
-export const DAY_OF_WEEK = [
+const DAY_OF_WEEK = [
   'sundays',
   'mondays',
   'tuesdays',
@@ -21,7 +21,7 @@ export const DAY_OF_WEEK = [
   'saturdays',
 ];
 
-export const ALPHABETEMOJI = [
+const ALPHABETEMOJI = [
   '🇦',
   '🇧',
   '🇨',
@@ -50,7 +50,7 @@ export const ALPHABETEMOJI = [
   '🇿',
 ];
 
-export const infoMessage = botName => (
+const infoMessage = botName => (
   `**You have to mention (@${botName}) the bot to execute a command!**\n` +
   `eg: *@${botName} ping*\n` +
   'All the commands are case insensitive.\n' +
@@ -79,3 +79,10 @@ export const infoMessage = botName => (
   'The bot will send a poll' +
   '@everyone with reactions available as means of answering.\n\n'
 );
+
+ module.exports = {
+  debug,
+  infoMessage,
+  DAY_OF_WEEK,
+  ALPHABETEMOJI,
+};
