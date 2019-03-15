@@ -257,7 +257,7 @@ const HANDLERS = [[
   },
 ], [
   /remind me to (.+) in (\d+)\s?([^\s]+)?/i,
-  (message, [_, reminder, number, identifier = 'seconds']) => {
+  (message, [_, reminder, number, identifier = 'minutes']) => {
     let time = 0;
     identifier.toLowerCase();
     switch (identifier) {
