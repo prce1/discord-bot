@@ -352,6 +352,8 @@ client.on('guildMemberAdd', (member) => {
 
 client.on('error', (error) => {
   debug(error.message);
+  // if you want the whole error shown, enable the next line
+  // debug(error);
 });
 
 client.on('warn', error => debug(error));
