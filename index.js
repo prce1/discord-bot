@@ -120,7 +120,7 @@ const HANDLERS = [[
     }
     message.delete(3000)
 
-      .then(msg => debug(`Deleted message from ${msg.author.username}`))
+      // .then(msg => debug(`Deleted message from ${msg.author.username}`))
 
       .catch(debug);
   },
@@ -129,7 +129,7 @@ const HANDLERS = [[
   (message) => {
     message.delete(3000)
 
-      .then(debug(`Deleted message from ${message.author.username}`))
+      // .then(debug(`Deleted message from ${message.author.username}`))
 
       .catch(debug);
     try {
