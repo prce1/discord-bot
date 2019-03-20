@@ -35,8 +35,9 @@ client.on('ready', () => {
 const HANDLERS = [[
   'error',
   (message) => {
-    client.emit('error', new Error('dev made error'));
-    message.channel.send('Y U DO DIS?');
+    client.emit('error', new Error('testing error'));
+    message.delete();
+    // message.channel.send('Y U DO DIS?');
   },
 ], [
   /^say:\s+(.+)/i,
