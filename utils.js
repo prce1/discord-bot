@@ -1,54 +1,24 @@
-const consoleColors = {
-  Reset: '\x1b[0m',
-  Bright: '\x1b[1m',
-  Dim: '\x1b[2m',
-  Underscore: '\x1b[4m',
-  Blink: '\x1b[5m',
-  Reverse: '\x1b[7m',
-  Hidden: '\x1b[8m',
-  fg: {
-    Black: '\x1b[30m',
-    Red: '\x1b[31m',
-    Green: '\x1b[32m',
-    Yellow: '\x1b[33m',
-    Blue: '\x1b[34m',
-    Magenta: '\x1b[35m',
-    Cyan: '\x1b[36m',
-    White: '\x1b[37m',
-    Crimson: '\x1b[38m', // القرمزي
-  },
-  bg: {
-    Black: '\x1b[40m',
-    Red: '\x1b[41m',
-    Green: '\x1b[42m',
-    Yellow: '\x1b[43m',
-    Blue: '\x1b[44m',
-    Magenta: '\x1b[45m',
-    Cyan: '\x1b[46m',
-    White: '\x1b[47m',
-    Crimson: '\x1b[48m',
-  },
-};
+const chalk = require('chalk');
 
-const debug = (string, method) => {
+const debug = (message, method) => {
   // change en-GB to en-US if you want date and month reversed
-  const message = `${new Intl.DateTimeFormat('en-GB', {
+  const time = `${new Intl.DateTimeFormat('en-GB', {
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
     hour: '2-digit',
     hour12: false,
     minute: '2-digit',
-  }).format(new Date())}: ${string}`;
+  }).format(new Date())}`;
   return (
     method === 'error'
     // eslint-disable-next-line no-console
-    ? console.error(consoleColors.fg.Red, message, consoleColors.Reset)
+    ? console.error(chalk.red(`${time}: Error: ${message}`))
     : method === 'warn'
     // eslint-disable-next-line no-console
-    ? console.warn(consoleColors.fg.blue, message, consoleColors.Reset)
+    ? console.warn(chalk.yellow(`${time}: Warning: ${message}`))
     // eslint-disable-next-line no-console
-    : console.log(consoleColors.fg.White, message, consoleColors.Reset)
+    : console.log(`${time}: ${message}`)
   );
 };
 

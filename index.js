@@ -35,7 +35,8 @@ client.on('ready', () => {
 const HANDLERS = [[
   'error',
   (message) => {
-    client.emit('error', new Error('testing error'));
+    client.emit('warn', `Error sent by a user: ${message.author.username}`);
+    client.emit('error', new Error('Error sent for testing purposes'));
     message.delete();
     // message.channel.send('Y U DO DIS?');
   },
@@ -357,7 +358,7 @@ client.on('error', (error) => {
   // debug(error, 'error');
 });
 
-client.on('warn', error => debug(error));
+client.on('warn', error => debug(error, 'warn'));
 // enable if you want all the info from DiscordJS
 // client.on('debug', e => debug(e));
 
