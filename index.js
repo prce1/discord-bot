@@ -84,18 +84,13 @@ const HANDLERS = [[
     const user = message.guild.members.get(name.replace(/[<@>]/g, ''));
     user
     .kick()
-    .then(
-
-      debug(
-        `${new Date()
-        }: ${message.author.username} removed ${user.user.username}.`)
-    )
-    .then(
-      message.channel.send(
-        `You have successfully kicked ${user.user.username} from the server.`
-      )
-    )
-
+    .then(() => {
+      const info = `${message.author.username} has successfully kicked ${
+        user.user.username
+      } from the server: ${groupName}`;
+      debug(info);
+      message.channel.send(info);
+    })
     .catch(error => debug(error.message, 'error'));
   }),
 ], [
