@@ -139,12 +139,21 @@ const HANDLERS = [[
   /^get me weather for ([^,]+)(?:, ([^\s]+))?/i,
   (message, [_, cityL, country = 'RS']) => {
     const city = cityL.split(' ').join('+');
+    if (!process.env.GOOGLE_TOKEN || !process.env.DARKSKY_TOKEN) {
+      message.channel.send('Your bot admin did not set up this feature.');
+      return;
+    }
     fetch(
       `https://maps.googleapis.com/maps/api/geocode/json?address=${city},+${
         country}&key=${process.env.GOOGLE_TOKEN}`
     )
-    .then(res => res.json()
+    .then(res => res.json())
     .then((resJson) => {
+      if (resJson.status === 'OVER_QUERY_LIMIT') {
+        throw new StraightResponseError(
+          'You have reached your Google API quota limit.'
+        );
+      }
       if (resJson.status !== 'OK') {
         throw new StraightResponseError('You have entered an invalid address.');
       } else {
@@ -171,17 +180,17 @@ const HANDLERS = [[
               response.daily.summary
             }**`
           );
-        })
-        .catch((error) => {
-          debug(error, 'error');
-          if (error instanceof StraightResponseError) {
-            message.channel.send(error);
-          } else {
-            message.channel.send(`Something went wrong: ${error}`);
-          }
         });
       }
-    }));
+    })
+    .catch((error) => {
+      debug(error.message, 'error');
+      if (error instanceof StraightResponseError) {
+        message.channel.send(error.message);
+      } else {
+        message.channel.send(`Something went wrong: ${error.message}`);
+      }
+    });
   },
 ], [
   /^get me popularity of ([^\s]+)(?: on ([^\s]+))?(?: at (\d\d)h?)?/i,
@@ -353,7 +362,7 @@ client.on('error', (error) => {
   // debug(error, 'error');
 });
 
-client.on('warn', error => debug(error, 'warn'));
+client.on('warn', error => debug(error.message, 'warn'));
 // enable if you want all the info from DiscordJS
 // client.on('debug', e => debug(e));
 
