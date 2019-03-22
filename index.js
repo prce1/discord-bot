@@ -95,7 +95,7 @@ const HANDLERS = [[
       )
     )
 
-    .catch(error => debug(error.message));
+    .catch(error => debug(error.message, 'error'));
   }),
 ], [
   /^ping$/i,
@@ -115,7 +115,7 @@ const HANDLERS = [[
           message.member.voiceChannel.leave();
           client.user.setActivity();
         });
-      }).catch(error => debug(error));
+      }).catch(error => debug(error, 'error'));
     } else {
       message.reply('You need to join a channel first!');
     }
@@ -123,7 +123,7 @@ const HANDLERS = [[
 
       // .then(msg => debug(`Deleted message from ${msg.author.username}`))
 
-      .catch(debug);
+      .catch(error => debug(error.message, 'error'));
   },
 ], [
   'stop',
@@ -132,7 +132,7 @@ const HANDLERS = [[
 
       // .then(debug(`Deleted message from ${message.author.username}`))
 
-      .catch(debug);
+      .catch(error => debug(error.message, 'error'));
     try {
       message.member.voiceChannel.leave();
     // eslint-disable-next-line no-empty
@@ -177,7 +177,7 @@ const HANDLERS = [[
           );
         })
         .catch((error) => {
-          debug(error);
+          debug(error, 'error');
           if (error instanceof StraightResponseError) {
             message.channel.send(error);
           } else {
@@ -248,7 +248,7 @@ const HANDLERS = [[
       }
     })
     .catch((error) => {
-      debug(error);
+      debug(error, 'error');
       if (error instanceof StraightResponseError) {
         message.channel.send(error.message);
       } else {
@@ -347,14 +347,14 @@ client.on('guildMemberAdd', (member) => {
       )
     )
 
-    .catch(debug);
+    .catch(error => debug(error, 'error'));
   }
 });
 
 client.on('error', (error) => {
-  debug(error.message);
+  debug(error.message, 'error');
   // if you want the whole error shown, enable the next line
-  // debug(error);
+  // debug(error, 'error');
 });
 
 client.on('warn', error => debug(error));
