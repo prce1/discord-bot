@@ -4,7 +4,6 @@
 /secrets.zip
 /env.zip
 .env.*.local
-/yarn.lock
 /*.tar.gz
 
 /etc/area-picker/public
