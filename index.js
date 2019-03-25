@@ -35,7 +35,10 @@ client.on('ready', () => {
 const HANDLERS = [[
   'error',
   (message) => {
-    client.emit('warn', `Error sent by a user: ${message.author.username}`);
+    client.emit(
+      'warn',
+      new Error(`Error sent by a user: ${message.author.username}`
+    ));
     client.emit('error', new Error('Error sent for testing purposes'));
     message.delete();
     // message.channel.send('Y U DO DIS?');
