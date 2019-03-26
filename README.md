@@ -46,5 +46,6 @@ Lastly, you will need a *GOOGLE_TOKEN*. You only need to get an API key for Goog
 
 After setting all these up, just save the file and run yarn|npm start in your console, and you're good to go!
 
+##### Google and Darksky Weather will be changed asap, as their APIs are not compatiable with the idea. When this change happens, you will probably only be able to search for weather by city and not by a full address.
 
 ##### It should be noted that this is a work in progress, and should only be taken as such.
