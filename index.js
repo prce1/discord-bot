@@ -40,14 +40,14 @@ const HANDLERS = [[
       new Error(`Error sent by a user: ${message.author.username}`
     ));
     client.emit('error', new Error('Error sent for testing purposes'));
-    message.delete();
+    message.delete().catch(error => debug(error.message, 'error'));
     // message.channel.send('Y U DO DIS?');
   },
 ], [
   /^say:\s+(.+)/i,
   ((message, [_, msg]) => {
     message.channel.send(`${msg}\n@everyone`);
-    message.delete();
+    message.delete().catch(error => debug(error.message, 'error'));
   }),
 ], [
   /^poll:\s+([^[]+)\s*$/i,
@@ -58,7 +58,7 @@ const HANDLERS = [[
       await msg.react('👎');
       await msg.react('🤷');
     });
-    message.delete();
+    message.delete().catch(error => debug(error.message, 'error'));
   }),
 ], [
   /^poll:\s+([^[]+)\s+((\[[^\]]+\])+)\s*$/i,
@@ -79,7 +79,7 @@ const HANDLERS = [[
         await msg.react(ALPHABETEMOJI[i]);
       }
     });
-    return message.delete();
+    message.delete().catch(error => debug(error.message, 'error'));
   }),
 ], [
   /^kick (.+)/i,
@@ -114,7 +114,7 @@ const HANDLERS = [[
           message.member.voiceChannel.leave();
           client.user.setActivity();
         });
-      }).catch(error => debug(error, 'error'));
+      }).catch(error => debug(error.message, 'error'));
     } else {
       message.reply('You need to join a channel first!');
     }
@@ -256,7 +256,7 @@ const HANDLERS = [[
       }
     })
     .catch((error) => {
-      debug(error, 'error');
+      debug(error.message, 'error');
       if (error instanceof StraightResponseError) {
         message.channel.send(error.message);
       } else {
@@ -326,13 +326,13 @@ client.on('message', (message) => {
         const match = test.exec(messageReplaced);
         test.lastIndex = 0;
         if (match) {
-          // message.delete(1000 * 15);
+          // message.delete(1000 * 15).catch(error => debug(error.message, 'error'));;
           return callback(message, match);
         }
         // message.channel.send(`For a list of commands, type "@${botName} help"`);
       }
     // } else if (message.author.username === `${botName}`) {
-    //   message.delete(1000 * 3 * 60);
+      //   message.delete(1000 * 3 * 60).catch(error => debug(error.message, 'error'));;
     }
   }
 });
@@ -355,7 +355,7 @@ client.on('guildMemberAdd', (member) => {
       )
     )
 
-    .catch(error => debug(error, 'error'));
+      .catch(error => debug(error.message, 'error'));
   }
 });
 
