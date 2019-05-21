@@ -50,7 +50,7 @@ const HANDLERS = [[
     message.delete().catch(error => debug(error.message, 'error'));
   }),
 ], [
-  /^poll:\s+([^[]+)\s*$/i,
+  /^poll:\s*([^[]+)\s*$/i,
   ((message, [_, question]) => {
     message.channel.send(`${question}  @everyone`)
     .then(async (msg) => {
@@ -61,7 +61,7 @@ const HANDLERS = [[
     message.delete().catch(error => debug(error.message, 'error'));
   }),
 ], [
-  /^poll:\s+([^[]+)\s+((\[[^\]]+\])+)\s*$/i,
+  /^poll:\s*([^[]+)\s+((\[[^\]]+\])+)\s*$/i,
   ((message, [_, rawQuestion, rawAnswers]) => {
     const answers = rawAnswers
     .slice(1, -1)
