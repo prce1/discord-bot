@@ -119,18 +119,14 @@ const HANDLERS = [[
       message.reply('You need to join a channel first!');
     }
     message.delete(3000)
-
       // .then(msg => debug(`Deleted message from ${msg.author.username}`))
-
       .catch(error => debug(error.message, 'error'));
   },
 ], [
   'stop',
   (message) => {
     message.delete(3000)
-
       // .then(debug(`Deleted message from ${message.author.username}`))
-
       .catch(error => debug(error.message, 'error'));
     try {
       message.member.voiceChannel.leave();
@@ -232,11 +228,11 @@ const HANDLERS = [[
         if (day === -1) {
           day = DAY_OF_WEEK.indexOf(`${dayInput}s`);
           if (day === -1) {
-            throw new StraightResponseError(`"${dayInput}" is not a day?!`);
+            throw new StraightResponseError(`"${dayInput}" is not a day.`);
           }
         } else if (time < 0 || time > 23) {
           throw new StraightResponseError(
-            `Don't know what "${time}" is, but it's not a time of the day`
+            `"${time}" is not a time of the day.`
           );
         }
         const value = place.meta.popularity[(day * 24) + time];
@@ -283,12 +279,15 @@ const HANDLERS = [[
       time = parseInt(number, 10) * 24 * 60 * 60 * 1000;
       break;
       default:
-      message.channel.send(`Invalid time: ${number}`);
+      message.channel.send(`Invalid time: ${number} ${identifier}.`);
     }
     client.setTimeout(() => {
-      debug(`Sent reminder: ${reminder}. to user: ${message.author}`);
+      // enable this is you want to see all the sent reminders in the console
+      // debug(`Sent reminder: ${reminder}. to user: ${message.author}`);
       message.author.send(`You need to ${reminder}!`);
     }, time, message);
+    // disable this if you want to see messages in your discord channel
+    message.delete(100).catch(error => debug(error.message, 'error'));
   },
 ], [
   'help',
@@ -318,8 +317,8 @@ client.on('message', (message) => {
       .replace(new RegExp(`[,\\s]*<@${botID}>[,\\s]*`, 'g'), ' ')
       .trim();
     if (
-      message.author.username !== `${botName}` &&
-      message.content.trim().length > 0
+      message.author.username !== `${botName}`
+      && message.content.trim().length > 0
     ) {
       for (let i = 0; i < HANDLERS.length; i++) {
         const [test, callback] = HANDLERS[i];
@@ -356,7 +355,7 @@ client.on('guildMemberAdd', (member) => {
     )
 
       .catch(error => debug(error.message, 'error'));
-  }
+   }
 });
 
 client.on('error', (error) => {
