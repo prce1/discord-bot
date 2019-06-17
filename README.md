@@ -17,7 +17,7 @@ In order to get this bot working, after cloning the repo and running yarn|npm, y
 
 Create a .env file and set it up as follows:
 ```shell
-DISCORD_TOKEN="YOUR DISCORD API TOKEN"
+CLIENT_TOKEN="YOUR DISCORD API TOKEN"
 BOT_NAME="THE NAME OF YOUR BOT"
 BOT_ID="THE ID OF YOUR BOT"
 DISCORD_GROUP_NAME="THE NAME OF YOUR DISCORD GROUP / GUILD / SERVER"
