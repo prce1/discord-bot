@@ -3358,11 +3358,6 @@ optionator@^0.8.2:
     type-check "~0.3.2"
     wordwrap "~1.0.0"
 
-opusscript@^0.0.6:
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/opusscript/-/opusscript-0.0.6.tgz#cf492fc5fb2c819af296ae02eaa3cf210433c9ba"
-  integrity sha512-F7nx1SWZCD5Rq2W+5Fx39HlkRkz/5Zqt0LglEB9uHexk8HjedDEiM+u/Y2rBfDFcS/0uQIWu2lJhw+Gjsta+cA==
-
 os-homedir@^1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/os-homedir/-/os-homedir-1.0.2.tgz#ffbc4988336e0e833de0c168c7ef152121aa7fb3"
