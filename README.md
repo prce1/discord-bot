@@ -13,9 +13,11 @@ The bot has only a couple commands available, which are:
 - kick members
 
 
-In order to get this bot working, after cloning the repo and running yarn|npm, you have to set up a few variables.
+In order to get this bot working, `git clone` the repo and in the repo folder, run `npm install` or `yarn`.
+Once that is finished, you have to set up a few variables.
 
 Create a .env file and set it up as follows:
+
 ```shell
 CLIENT_TOKEN="YOUR DISCORD API TOKEN"
 BOT_NAME="THE NAME OF YOUR BOT"
@@ -25,6 +27,7 @@ ENTRY_ROLE="YOUR ENTRY ROLE NAME HERE"
 DARKSKY_TOKEN="YOUR DARKSKY API TOKEN"
 GOOGLE_TOKEN="YOUR GOOGLE GEOLOCATOR API TOKEN"
 ```
+
 Getting all these will only take a couple of minutes.
 
 First, you need to visit [Discord Developers](https://discordapp.com/developers/applications/), create an application, and get that info. You will need Client-ID *(The ID of your bot)*. You will also have to set it up as a bot, and then get it's TOKEN *(Your Discord API Token)* and USERNAME *(The Name of your bot)*.
