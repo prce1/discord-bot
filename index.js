@@ -41,7 +41,6 @@ const HANDLERS = [[
     ));
     client.emit('error', new Error('Error sent for testing purposes'));
     message.delete().catch(error => debug(error.message, 'error'));
-    // message.channel.send('Y U DO DIS?');
   },
 ], [
   /^say:\s+(.+)/i,
@@ -104,7 +103,8 @@ const HANDLERS = [[
   async (message, [_, link]) => {
     if (message.member.voiceChannel) {
       const streamOptions = { seek: 0, volume: 1 };
-      message.member.voiceChannel.join().then((connection) => {
+      message.member.voiceChannel.join()
+      .then((connection) => {
         ytdl.getInfo(`${link}`).then((res) => {
           client.user.setActivity(`${res.title}`);
         });
@@ -114,24 +114,23 @@ const HANDLERS = [[
           message.member.voiceChannel.leave();
           client.user.setActivity();
         });
-      }).catch(error => debug(error.message, 'error'));
+      })
+      .catch(error => debug(error.message, 'error'));
     } else {
       message.reply('You need to join a channel first!');
     }
-    message.delete(3000)
-      // .then(msg => debug(`Deleted message from ${msg.author.username}`))
-      .catch(error => debug(error.message, 'error'));
+    message.delete(3000).catch(error => debug(error.message, 'error'));
   },
 ], [
-  'stop',
+  /^stop/i,
   (message) => {
-    message.delete(3000)
-      // .then(debug(`Deleted message from ${message.author.username}`))
-      .catch(error => debug(error.message, 'error'));
+    message.delete(3000).catch(error => debug(error.message, 'error'));
     try {
       message.member.voiceChannel.leave();
     // eslint-disable-next-line no-empty
-    } catch (error) {}
+    } catch (error) {
+      debug(error.message, 'error');
+    }
     client.user.setActivity();
   },
 ], [
@@ -139,7 +138,9 @@ const HANDLERS = [[
   (message, [_, cityL, country = 'RS']) => {
     const city = cityL.split(' ').join('+');
     if (!process.env.GOOGLE_TOKEN || !process.env.DARKSKY_TOKEN) {
-      message.channel.send('Your bot admin did not set up this feature.');
+      const warning = 'Your bot admin did not set up this feature.';
+      debug(warning, 'warn');
+      message.channel.send(warning);
       return;
     }
     fetch(
@@ -199,13 +200,15 @@ const HANDLERS = [[
       _,
       slug,
       dayInput = DAY_OF_WEEK[new Date().getDay()],
-      timeInput = new Date().getMinutes() > 45
+      timeInput = (
+        new Date().getMinutes() > 45
         ? (
-            (new Date().getHours() + 1) === 24
+            new Date().getHours() + 1 === 24
             ? 0
-            : (new Date().getHours() + 1)
+            : new Date().getHours() + 1
           )
-        : new Date().getHours(),
+        : new Date().getHours()
+      ),
     ]
   ) => {
     fetch(`https://populr.app/api/places?query=${JSON.stringify({
@@ -221,9 +224,11 @@ const HANDLERS = [[
       if (place) {
         const name = place.meta.name.charAt(0).toUpperCase() +
           place.meta.name.substr(1);
-        const time = parseInt(timeInput, 10) === 24
+        const time = (
+          parseInt(timeInput, 10) === 24
           ? 0
-          : parseInt(timeInput, 10);
+          : parseInt(timeInput, 10)
+        );
         let day = DAY_OF_WEEK.indexOf(dayInput);
         if (day === -1) {
           day = DAY_OF_WEEK.indexOf(`${dayInput}s`);

@@ -1,6 +1,6 @@
 {
   "name": "small-discord-bot",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "license": "MIT",
   "organization": "TheHive",
   "author": {
@@ -20,18 +20,10 @@
     "ytdl-core": "^0.21.1"
   },
   "devDependencies": {
-    "babel-core": "^6.26.0",
-    "babel-eslint": "^8.2.3",
-    "babel-preset-env": "^1.6.1",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-react": "^6.24.1",
-    "babel-preset-stage-2": "^6.24.1",
     "dxtools": "https://github.com/nikolakanacki/dxtools.git",
     "eslint": "^4.19.1",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-plugin-import": "^2.11.0",
-    "eslint-plugin-jsx-a11y": "^6.0.3",
-    "eslint-plugin-react": "^7.7.0",
     "nodemon": "^1.17.3"
   }
 }
