@@ -67,7 +67,8 @@ const HANDLERS = [[
     .split('][')
     .map((answer, i) => `${ALPHABETEMOJI[i]} ${answer}`);
     message.channel.send(`${rawQuestion}  @everyone`);
-    message.channel.send({
+    message.channel
+    .send({
       embed: {
         color: 3447003,
         description: answers.join('\n\n'),
