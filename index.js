@@ -318,7 +318,7 @@ client.on('message', (message) => {
   if ((/^(bot) ([^]+)$/).test(message.content)) {
     message.channel.send(`For a list of commands, type "@${botName} help".`);
   }
-  if (message.mentions.users.find('id', botID)) {
+  if (message.mentions.users.get(botID)) {
     const messageReplaced = message.content
       .replace(new RegExp(`[,\\s]*<@${botID}>[,\\s]*`, 'g'), ' ')
       .trim();
