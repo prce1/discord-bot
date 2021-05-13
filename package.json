@@ -15,7 +15,7 @@
     "discord.js": "^11.5.1",
     "dotenv": "^8.1.0",
     "lodash": "^4.17.21",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.1",
     "opusscript": "^0.0.7",
     "ytdl-core": "^0.29.5"
   },
